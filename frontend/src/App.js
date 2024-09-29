@@ -1,11 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
-import Navigation from '../src/customer/components/Navigation/Navigation'
+import HomePage from './Pages/HomePage';
 function App() {
   return (
     <div className="App">
-      <Navigation/>
-      Hello world
+      <HomePage/>
     </div>
   );
 }
