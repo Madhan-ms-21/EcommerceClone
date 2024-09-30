@@ -23,11 +23,14 @@ const HomeProductCarousel = () => {
 
     console.log(items)
     return (
-        <AliceCarousel
-            items={items}
-            responsive={responsive}
-            disableDotsControls
-        />
+        <div>
+            <AliceCarousel
+                items={items}
+                responsive={responsive}
+                disableDotsControls
+            />
+        </div>
+        
     )
 }
 
