@@ -17,6 +17,13 @@ import {
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
 import ProductCard from '../ProductCard/ProductCard'
+import { filters, singleFilter, sortOptions } from "./FilterData";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+// import Pagination from "@mui/material/Pagination";
 const products = [
     {
         "imageUrl": "https://rukminim1.flixcart.com/image/612/612/xif0q/jean/h/y/g/34-jeans-bt008-laheja-original-imagqqbsfgmdhcvn.jpeg?q=70",
@@ -1139,48 +1146,48 @@ const products = [
         "description": "A traditional garment embodying elegance and grace. Crafted from fine fabrics, it features intricate embroidery and a relaxed fit, providing comfort and style."
     }
 ]
-const sortOptions = [
-    { name: 'Price: Low to High', href: '#', current: false },
-    { name: 'Price: High to Low', href: '#', current: false },
-]
+// const sortOptions = [
+//     { name: 'Price: Low to High', href: '#', current: false },
+//     { name: 'Price: High to Low', href: '#', current: false },
+// ]
 
-const filters = [
-    {
-        id: 'color',
-        name: 'Color',
-        options: [
-            { value: 'white', label: 'White', checked: false },
-            { value: 'beige', label: 'Beige', checked: false },
-            { value: 'blue', label: 'Blue', checked: true },
-            { value: 'brown', label: 'Brown', checked: false },
-            { value: 'green', label: 'Green', checked: false },
-            { value: 'purple', label: 'Purple', checked: false },
-        ],
-    },
-    {
-        id: 'category',
-        name: 'Category',
-        options: [
-            { value: 'new-arrivals', label: 'New Arrivals', checked: false },
-            { value: 'sale', label: 'Sale', checked: false },
-            { value: 'travel', label: 'Travel', checked: true },
-            { value: 'organization', label: 'Organization', checked: false },
-            { value: 'accessories', label: 'Accessories', checked: false },
-        ],
-    },
-    {
-        id: 'size',
-        name: 'Size',
-        options: [
-            { value: '2l', label: '2L', checked: false },
-            { value: '6l', label: '6L', checked: false },
-            { value: '12l', label: '12L', checked: false },
-            { value: '18l', label: '18L', checked: false },
-            { value: '20l', label: '20L', checked: false },
-            { value: '40l', label: '40L', checked: true },
-        ],
-    },
-]
+// const filters = [
+//     {
+//         id: 'color',
+//         name: 'Color',
+//         options: [
+//             { value: 'white', label: 'White', checked: false },
+//             { value: 'beige', label: 'Beige', checked: false },
+//             { value: 'blue', label: 'Blue', checked: true },
+//             { value: 'brown', label: 'Brown', checked: false },
+//             { value: 'green', label: 'Green', checked: false },
+//             { value: 'purple', label: 'Purple', checked: false },
+//         ],
+//     },
+//     {
+//         id: 'category',
+//         name: 'Category',
+//         options: [
+//             { value: 'new-arrivals', label: 'New Arrivals', checked: false },
+//             { value: 'sale', label: 'Sale', checked: false },
+//             { value: 'travel', label: 'Travel', checked: true },
+//             { value: 'organization', label: 'Organization', checked: false },
+//             { value: 'accessories', label: 'Accessories', checked: false },
+//         ],
+//     },
+//     {
+//         id: 'size',
+//         name: 'Size',
+//         options: [
+//             { value: '2l', label: '2L', checked: false },
+//             { value: '6l', label: '6L', checked: false },
+//             { value: '12l', label: '12L', checked: false },
+//             { value: '18l', label: '18L', checked: false },
+//             { value: '20l', label: '20L', checked: false },
+//             { value: '40l', label: '40L', checked: true },
+//         ],
+//     },
+// ]
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -1188,6 +1195,14 @@ function classNames(...classes) {
 
 export default function Product() {
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+    const location = useLocation();
+    const navigate = useNavigate();
+    const handleRadioFilterChange = (e, sectionId) => {
+        const searchParams = new URLSearchParams(location.search);
+        searchParams.set(sectionId, e.target.value);
+        const query = searchParams.toString();
+        navigate({ search: `?${query}` });
+      };
 
     return (
         <div className="bg-white">
@@ -1352,6 +1367,60 @@ export default function Product() {
                                                 ))}
                                             </div>
                                         </DisclosurePanel>
+                                    </Disclosure>
+                                ))}
+
+                                {singleFilter.map((section) => (
+                                    <Disclosure
+                                        // defaultOpen={true}
+                                        as="div"
+                                        key={section.id}
+                                        className="border-b border-gray-200 py-6"
+                                    >
+                                        {({ open }) => (
+                                            <>
+                                                <h3 className="-my-3 flow-root">
+                                                    <Disclosure.Button className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
+                                                        <span className="font-medium text-gray-900">
+                                                            {section.name}
+                                                        </span>
+                                                        <span className="ml-6 flex items-center">
+                                                            {open ? (
+                                                                <MinusIcon
+                                                                    className="h-5 w-5"
+                                                                    aria-hidden="true"
+                                                                />
+                                                            ) : (
+                                                                <PlusIcon
+                                                                    className="h-5 w-5"
+                                                                    aria-hidden="true"
+                                                                />
+                                                            )}
+                                                        </span>
+                                                    </Disclosure.Button>
+                                                </h3>
+                                                <Disclosure.Panel className="pt-6">
+                                                    <FormControl>
+                                                        <RadioGroup
+                                                            aria-labelledby="demo-radio-buttons-group-label"
+                                                            defaultValue="female"
+                                                            name="radio-buttons-group"
+                                                        >
+                                                            {section.options.map((option, optionIdx) => (
+                                                                <FormControlLabel
+                                                                    value={option.value}
+                                                                    control={<Radio />}
+                                                                    label={option.label}
+                                                                    onChange={(e) =>
+                                                                        handleRadioFilterChange(e, section.id)
+                                                                    }
+                                                                />
+                                                            ))}
+                                                        </RadioGroup>
+                                                    </FormControl>
+                                                </Disclosure.Panel>
+                                            </>
+                                        )}
                                     </Disclosure>
                                 ))}
                             </form>
