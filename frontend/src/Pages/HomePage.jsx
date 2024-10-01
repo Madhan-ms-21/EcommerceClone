@@ -7,7 +7,7 @@ import Footer from '../customer/components/Footer/Footer'
 const HomePage = () => {
     return (
         <div>
-            <Navigation />
+            {/* <Navigation /> */}
             <MainCarousel/>
             <div>
                 <HomeProductCarousel/>

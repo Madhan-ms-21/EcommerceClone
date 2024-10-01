@@ -30,6 +30,8 @@ import {
   TabPanels,
 } from '@headlessui/react'
 import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Button } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 
 const navigation = {
   categories: [
@@ -156,6 +158,9 @@ const navigation = {
 
 export default function Navigation() {
   const [open, setOpen] = useState(false)
+  const navigate = useNavigate();
+
+  
 
   return (
     <div className="bg-white">
@@ -299,14 +304,14 @@ export default function Navigation() {
 
               {/* Logo */}
               <div className="ml-4 flex lg:ml-0">
-                <a href="#">
+                <Button onClick={()=>navigate('/')}>
                   <span className="sr-only">Your Company</span>
                   <img
                     alt=""
                     src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
                     className="h-8 w-auto"
                   />
-                </a>
+                </Button>
               </div>
 
               {/* Flyout menus */}
@@ -402,17 +407,6 @@ export default function Navigation() {
                   </a>
                 </div>
 
-                <div className="hidden lg:ml-8 lg:flex">
-                  <a href="#" className="flex items-center text-gray-700 hover:text-gray-800">
-                    <img
-                      alt=""
-                      src="https://tailwindui.com/img/flags/flag-canada.svg"
-                      className="block h-auto w-5 flex-shrink-0"
-                    />
-                    <span className="ml-3 block text-sm font-medium">CAD</span>
-                    <span className="sr-only">, change currency</span>
-                  </a>
-                </div>
 
                 {/* Search */}
                 <div className="flex lg:ml-6">
@@ -424,14 +418,16 @@ export default function Navigation() {
 
                 {/* Cart */}
                 <div className="ml-4 flow-root lg:ml-6">
-                  <a href="#" className="group -m-2 flex items-center p-2">
+                  <Button onClick={()=> navigate("/cart")}>
+                  {/* <a href="#" className="group -m-2 flex items-center p-2"> */}
                     <ShoppingBagIcon
                       aria-hidden="true"
                       className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                     />
-                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
+                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">5</span>
                     <span className="sr-only">items in cart, view bag</span>
-                  </a>
+                  {/* </a> */}
+                  </Button>
                 </div>
               </div>
             </div>

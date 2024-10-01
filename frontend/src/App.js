@@ -10,10 +10,17 @@ import Footer from './customer/components/Footer/Footer';
 import Checkout from  './customer/components/Checkout/Checkout'
 import Order from './customer/components/Order/Order'
 import OrderDetails from './customer/components/Order/OrderDetails'
+import { Route, Routes } from 'react-router-dom';
+import CustomerRoutes from './Routes/CustomerRoutes';
 function App() {
   return (
     <div className="App">
-      <Navigation/>
+
+      <Routes>
+        <Route path='/*' element={<CustomerRoutes/>}/>
+
+      </Routes>
+      {/* <Navigation/> */}
       {/* <HomePage/> */}
       {/* <ProductCard /> */}
       {/* <Product/> */}
@@ -21,8 +28,8 @@ function App() {
       {/* <Cart/> */}
       {/* <Checkout/> */}
       {/* <Order/>  */}
-      <OrderDetails/>
-      <Footer/>
+      {/* <OrderDetails/> */}
+      {/* <Footer/> */}
     </div>
   );
 }
