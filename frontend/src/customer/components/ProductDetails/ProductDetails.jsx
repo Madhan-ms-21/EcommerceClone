@@ -258,7 +258,7 @@ export default function ProductDetails() {
                                     </fieldset>
                                 </div>
 
-                                <Button color="secondary" variant='contained' sx={{ px: "2rem", py: "2rem" }}>
+                                <Button className = "pt-11" color="secondary" variant='contained' sx={{ px: "2rem", py: "2rem" }}>
                                     Add to Cart
                                 </Button>
 
@@ -398,7 +398,7 @@ export default function ProductDetails() {
                                         </Grid>
                                         <Grid xs={7}>
                                             <LinearProgress
-                                                className="bg-[#885c0a]"
+                                                className="bg-amber-300"
                                                 sx={{ bgcolor: "#d0d0d0", borderRadius: 4, height: 7 }}
                                                 variant="determinate"
                                                 value={25}
@@ -406,7 +406,7 @@ export default function ProductDetails() {
                                             />
                                         </Grid>
                                         <Grid xs={2}>
-                                            <p className="opacity-50 p-2">19259</p>
+                                            <p className="opacity-50 p-2">15259</p>
                                         </Grid>
                                     </Grid>
                                 </Box>
