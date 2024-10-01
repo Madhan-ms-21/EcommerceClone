@@ -22,6 +22,7 @@ export default function Checkout() {
     const location = useLocation();
     const query = new URLSearchParams(location.search);
     const step = query.get('step');
+    console.log("Inside cart and getting step " + step);
 
     const isStepOptional = (step) => {
         return step === 1;
@@ -68,7 +69,7 @@ export default function Checkout() {
     };
 
     return (
-        <Box className="px-5 lg:px-32 " sx={{ width: "100%" }}>
+        <Box className="px-5 py-10 lg:px-32 " sx={{ width: "100%" }}>
             <Stepper activeStep={step}>
                 {steps.map((label, index) => {
                     const stepProps = {};

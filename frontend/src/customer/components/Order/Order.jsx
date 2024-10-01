@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material'
+import { Box, Grid } from '@mui/material'
 import React from 'react'
 import OrderCard from './OrderCard'
 
@@ -13,8 +13,8 @@ const Order = () => {
         { label: "Returned", value: "returned" }
     ]
     return (
-        <div>
-            <Grid container sx={{ justifyContent: "space-between" }}>
+        <Box className="px-10 py-10">
+            <Grid container spacing={0} sx={{ justifyContent: "space-between" }}>
 
                 <Grid item xs={2.5}>
                     <div className='h-auto shadow-lg bg-white p-5 sticky top-5'>
@@ -30,16 +30,17 @@ const Order = () => {
                         </div>
                     </div>
                 </Grid>
-                <Grid item xs ={9}>
-                    <OrderCard/>
-                    <OrderCard/>
-                    <OrderCard/>
-                    <OrderCard/>
+                <Grid item xs={9}>
+                    <Box className="space-y-5 ">
+                        {1 > 0 && [1].map((order) => {
+                            return [1,1,1,1].map((item, index) => <OrderCard item={item} order={order} />)
+                        })}
+                    </Box>
                 </Grid>
 
             </Grid>
 
-        </div>
+        </Box>
     )
 }
 

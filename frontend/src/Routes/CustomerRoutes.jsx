@@ -13,13 +13,15 @@ const CustomerRoutes = () => {
     <div>
       <div>
         <Navigation/>
+        {/* <Checkout/> */}
         <Routes>
             <Route path='/' element={<HomePage/>} />
             <Route path='/cart' element = {<Cart/>} />
             <Route path='/account/order' element = {<Order/>} />
             <Route path='/:level1/:level2/:level3/product' element = {<Product/>} />
             <Route path='/product/:Id' element = {<ProductDetails/>} />
-            <Route Path = '/checkout?step=2' element = {<Checkout/>}/>
+            <Route path ='/checkout' element = {<Checkout/>}/>
+            
 
 
         </Routes>
