@@ -8,11 +8,13 @@ import Product from '../customer/components/Product/Product'
 import ProductDetails from '../customer/components/ProductDetails/ProductDetails'
 import Checkout from '../customer/components/Checkout/Checkout'
 
+
 const CustomerRoutes = () => {
   return (
     <div>
       <div>
-        <Navigation />
+        
+        <Navigation/>
         {/* <Checkout/> */}
         <Routes>
           <Route path="/login" element={<HomePage />}></Route>
@@ -20,6 +22,7 @@ const CustomerRoutes = () => {
           <Route path='/' element={<HomePage />} />
           <Route path='/cart' element={<Cart />} />
           <Route path='/account/order' element={<Order />} />
+          <Route path="/:level1/:level2/:level3" element={<Product />}></Route>
           <Route path='/:level1/:level2/:level3/product' element={<Product />} />
           <Route path='/product/:Id' element={<ProductDetails />} />
           <Route path='/checkout' element={<Checkout />} />

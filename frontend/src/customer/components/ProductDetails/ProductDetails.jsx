@@ -3,10 +3,13 @@
 import { useState } from 'react'
 import { StarIcon } from '@heroicons/react/20/solid'
 import { Radio, RadioGroup } from '@headlessui/react'
-import { Button,  Rating } from '@mui/material';
+import { Button, Rating } from '@mui/material';
 import { Box, Grid, LinearProgress } from "@mui/material";
 
 import ProductReviewCard from './ProducrReviewCard';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { addItemTOCart } from '../../../Redux/Cart/Action';
 const product = {
     name: 'Basic Tee 6-Pack',
     price: '$192',
@@ -52,9 +55,9 @@ const product = {
         'Pre-washed & pre-shrunk',
         'Ultra-soft 100% cotton',
     ],
-    reviews : [
-        {'review' : "good"},
-        {'review' :'nice shirt'}
+    reviews: [
+        { 'review': "good" },
+        { 'review': 'nice shirt' }
     ],
     details:
         'The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming "Charcoal Gray" limited release.',
@@ -68,6 +71,20 @@ function classNames(...classes) {
 export default function ProductDetails() {
     const [selectedColor, setSelectedColor] = useState(product.colors[0])
     const [selectedSize, setSelectedSize] = useState(product.sizes[2])
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { productId } = useParams();
+    const jwt = localStorage.getItem('jwt');
+
+    const {cart} = useSelector((store)=>store);
+
+    const handleSubmit = () => {
+        const data = { productId, size: selectedSize.name };
+        dispatch(addItemTOCart({ data, jwt }));
+        navigate("/cart");
+
+    }
+
 
     return (
         <div className="bg-white">
@@ -174,7 +191,7 @@ export default function ProductDetails() {
                         </div>
 
                         <div>
-                            <form className="mt-10">
+                            <form className="mt-10" onSubmit={handleSubmit}>
                                 {/* Colors */}
                                 <div>
                                     <h3 className="text-sm font-medium text-gray-900">Color</h3>
@@ -258,7 +275,7 @@ export default function ProductDetails() {
                                     </fieldset>
                                 </div>
 
-                                <Button className = "pt-11" color="secondary" variant='contained' sx={{ px: "2rem", py: "2rem" }}>
+                                <Button type="submit" className="pt-11" color="secondary" variant='contained' sx={{ px: "2rem", py: "2rem" }}>
                                     Add to Cart
                                 </Button>
 
