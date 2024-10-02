@@ -1,17 +1,3 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/aspect-ratio'),
-    ],
-  }
-  ```
-*/
 'use client'
 
 import { Fragment, useState } from 'react'
@@ -30,8 +16,13 @@ import {
   TabPanels,
 } from '@headlessui/react'
 import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { Button } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
+import { Avatar, Button, Menu, MenuItem } from '@mui/material'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import AuthModal from '../Auth/AuthModal'
+import { logout } from '../../../Redux/Auth/AuthAction'
+import { deepPurple } from '@mui/material/colors'
 
 const navigation = {
   categories: [
@@ -159,8 +150,51 @@ const navigation = {
 export default function Navigation() {
   const [open, setOpen] = useState(false)
   const navigate = useNavigate();
+  const {auth} = useSelector((store)=>store)
+  const jwt = localStorage.getItem("jwt");
+  const location = useLocation();
+  const [openAuthModal,setOpenAuthModal] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const dispatch = useDispatch();
+  const openUserMenu = Boolean(anchorEl);
 
-  
+
+  const handleUserClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleCloseUserMenu = (event) => {
+    setAnchorEl(null);
+  };
+
+  const handleOpen = () => {
+    setOpenAuthModal(true);
+  };
+  const handleClose = () => {
+    setOpenAuthModal(false);
+  };
+
+  const handleMyOrderClick = () => {
+    handleCloseUserMenu();
+    auth.user?.role === "ROLE_ADMIN"
+      ? navigate("/admin")
+      : navigate("/account/order");
+  };
+
+  useEffect(() => {
+    if (auth.user) {
+      handleClose();
+    }
+    if (location.pathname === "/login" || location.pathname === "/register") {
+      navigate(-1);
+    }
+  }, [auth.user]);
+
+  const handleLogout = () => {
+    handleCloseUserMenu();
+    dispatch(logout());
+  };
+
+
 
   return (
     <div className="bg-white">
@@ -262,11 +296,11 @@ export default function Navigation() {
                   Sign in
                 </a>
               </div>
-              <div className="flow-root">
+              {/* <div className="flow-root">
                 <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
                   Create account
                 </a>
-              </div>
+              </div> */}
             </div>
 
             <div className="border-t border-gray-200 px-4 py-6">
@@ -398,13 +432,46 @@ export default function Navigation() {
 
               <div className="ml-auto flex items-center">
                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                  <a href="#" className="text-sm font-medium text-gray-700 hover:text-gray-800">
+                {auth.user ? (
+                    <div>
+                      <Avatar
+                        className="text-white"
+                        onClick={handleUserClick}
+                        aria-controls={open ? "basic-menu" : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? "true" : undefined}
+                        // onClick={handleUserClick}
+                        sx={{
+                          bgcolor: deepPurple[500],
+                          color: "white",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {auth.user?.firstName[0].toUpperCase()}
+                      </Avatar>
+                      <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={openUserMenu}
+                        onClose={handleCloseUserMenu}
+                        MenuListProps={{
+                          "aria-labelledby": "basic-button",
+                        }}
+                      >
+                        <MenuItem onClick={handleMyOrderClick}>
+                          {auth.user?.role === "ROLE_ADMIN"
+                            ? "Admin Dashboard"
+                            : "My Orders"}
+                        </MenuItem>
+                        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                      </Menu>
+                    </div>
+                  ) :<Button 
+                  onClick={handleOpen}
+                   className="text-sm font-medium text-gray-700 hover:text-gray-800">
                     Sign in
-                  </a>
-                  <span aria-hidden="true" className="h-6 w-px bg-gray-200" />
-                  <a href="#" className="text-sm font-medium text-gray-700 hover:text-gray-800">
-                    Create account
-                  </a>
+                  </Button>}
+                  
                 </div>
 
 
@@ -433,6 +500,7 @@ export default function Navigation() {
             </div>
           </div>
         </nav>
+        <AuthModal handleClose={handleClose} open={openAuthModal} />
       </header>
     </div>
   )

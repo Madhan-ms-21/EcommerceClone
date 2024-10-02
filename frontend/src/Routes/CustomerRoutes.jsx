@@ -1,5 +1,5 @@
 import React from 'react'
-import {Routes , Route} from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import Navigation from '../customer/components/Navigation/Navigation'
 import HomePage from '../Pages/HomePage'
 import Cart from '../customer/components/Cart/Cart'
@@ -12,16 +12,18 @@ const CustomerRoutes = () => {
   return (
     <div>
       <div>
-        <Navigation/>
+        <Navigation />
         {/* <Checkout/> */}
         <Routes>
-            <Route path='/' element={<HomePage/>} />
-            <Route path='/cart' element = {<Cart/>} />
-            <Route path='/account/order' element = {<Order/>} />
-            <Route path='/:level1/:level2/:level3/product' element = {<Product/>} />
-            <Route path='/product/:Id' element = {<ProductDetails/>} />
-            <Route path ='/checkout' element = {<Checkout/>}/>
-            
+          <Route path="/login" element={<HomePage />}></Route>
+          <Route path="/register" element={<HomePage />}></Route>
+          <Route path='/' element={<HomePage />} />
+          <Route path='/cart' element={<Cart />} />
+          <Route path='/account/order' element={<Order />} />
+          <Route path='/:level1/:level2/:level3/product' element={<Product />} />
+          <Route path='/product/:Id' element={<ProductDetails />} />
+          <Route path='/checkout' element={<Checkout />} />
+
 
 
         </Routes>
