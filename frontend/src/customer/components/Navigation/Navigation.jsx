@@ -161,6 +161,7 @@ export default function Navigation() {
 
   const handleUserClick = (event) => {
     setAnchorEl(event.currentTarget);
+    console.log(anchorEl)
   };
   const handleCloseUserMenu = (event) => {
     setAnchorEl(null);
