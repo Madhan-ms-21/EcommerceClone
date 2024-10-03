@@ -8,8 +8,8 @@ import { orderReducer } from './Order/Reducer';
 
 const rootReducers=combineReducers({
 
-    auth:AuthReducer,
-    product:ProductReducer,
+    auth : AuthReducer,
+    customersProduct : ProductReducer,
     cart : cartReducer,
     order : orderReducer,
 

@@ -12,7 +12,7 @@ export default function ProductCard({product}) {
         navigate(`/product/${product?.id || product?._id || 2}`)
       }
 
-    const { title, brand, imageUrl, price ,discountedPrice,color,discountPersent} = product;
+    const { title, brand, imageUrl, price ,discountedPrice,color,discountPercentage} = product;
     return (
         <div onClick={handleNavigate} className='productCard w-[15rem] border m-3 transition-all cursor-pointer '>
             <div className='h-[20rem]'>
@@ -29,7 +29,7 @@ export default function ProductCard({product}) {
                 <div className='flex space-x-2 justify-items-stretch'>
                     <p className='font-semibold'>₹{discountedPrice}</p>
                     <p className='opacity-50 line-through'>₹{price}</p>
-                    <p className='text-green-600 font-semibold'>{discountPersent}% off</p>
+                    <p className='text-green-600 font-semibold'>{discountPercentage}% off</p>
                 </div>
 
             </div>

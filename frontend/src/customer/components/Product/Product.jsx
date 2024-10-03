@@ -1,7 +1,7 @@
 
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
     Dialog,
     DialogBackdrop,
@@ -22,7 +22,9 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux'
+import { findProducts } from '../../../Redux/Product/Action'
 // import Pagination from "@mui/material/Pagination";
 const products = [
     {
@@ -1197,6 +1199,9 @@ export default function Product() {
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
     const location = useLocation();
     const navigate = useNavigate();
+    const param = useParams();
+    const dispatch = useDispatch();
+    const {customersProduct} = useSelector((store)=>store)
     const handleRadioFilterChange = (e, sectionId) => {
         const searchParams = new URLSearchParams(location.search);
         searchParams.set(sectionId, e.target.value);
@@ -1205,33 +1210,89 @@ export default function Product() {
     };
 
 
+
+    // const filter = decodeURIComponent(location.search);
+    const decodedQueryString = decodeURIComponent(location.search);
+    const searchParams = new URLSearchParams(decodedQueryString);
+    const colorValue = searchParams.get("color");
+    const sizeValue = searchParams.get("size");
+    const price = searchParams.get("price");
+    const discount = searchParams.get("disccout");
+    const sortValue = searchParams.get("sort");
+    const pageNumber = searchParams.get("page") || 1;
+    const stock = searchParams.get("stock");
+
+    // console.log("location - ", colorValue, sizeValue,price,disccount);
+
+    const handleSortChange = (value) => {
+        const searchParams = new URLSearchParams(location.search);
+        searchParams.set("sort", value);
+        const query = searchParams.toString();
+        navigate({ search: `?${query}` });
+    };
+    const handlePaginationChange = (event, value) => {
+        const searchParams = new URLSearchParams(location.search);
+        searchParams.set("page", value);
+        const query = searchParams.toString();
+        navigate({ search: `?${query}` });
+    };
+
+    useEffect(() => {
+        const [minPrice, maxPrice] =
+            price === null ? [0, 0] : price.split("-").map(Number);
+        const data = {
+            category: param.level3,
+            colors: colorValue || [],
+            sizes: sizeValue || [],
+            minPrice: minPrice || 0,
+            maxPrice: maxPrice || 100000,
+            minDiscount: discount || 0,
+            sort: sortValue || "price_low",
+            pageNumber: pageNumber - 1,
+            pageSize: 10,
+            stock: stock,
+        };
+        console.log("Inside Product Card " + data);
+        console.log(data)
+        dispatch(findProducts(data));
+    }, [
+        param.lavelThree,
+        colorValue,
+        sizeValue,
+        price,
+        discount,
+        sortValue,
+        pageNumber,
+        stock,
+    ]);
+
     const handleFilter = (value, sectionId) => {
         const searchParams = new URLSearchParams(location.search);
-    
+
         let filterValues = searchParams.getAll(sectionId);
-    
+
         if (filterValues.length > 0 && filterValues[0].split(",").includes(value)) {
-          filterValues = filterValues[0]
-            .split(",")
-            .filter((item) => item !== value);
-          if (filterValues.length === 0) {
-            searchParams.delete(sectionId);
-          }
-          console.log("includes");
+            filterValues = filterValues[0]
+                .split(",")
+                .filter((item) => item !== value);
+            if (filterValues.length === 0) {
+                searchParams.delete(sectionId);
+            }
+            console.log("includes");
         } else {
-          // Remove all values for the current section
-          // searchParams.delete(sectionId);
-          filterValues.push(value);
+            // Remove all values for the current section
+            // searchParams.delete(sectionId);
+            filterValues.push(value);
         }
-    
+
         if (filterValues.length > 0)
-          searchParams.set(sectionId, filterValues.join(","));
-    
+            searchParams.set(sectionId, filterValues.join(","));
+
         // history.push({ search: searchParams.toString() });
         const query = searchParams.toString();
         navigate({ search: `?${query}` });
     };
-    
+
     return (
         <div className="bg-white">
             <div>
@@ -1444,7 +1505,7 @@ export default function Product() {
                                                                 type="checkbox"
                                                                 onChange={() =>
                                                                     handleFilter(option.value, section.id)
-                                                                  }
+                                                                }
                                                                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                                             />
                                                             <label htmlFor={`filter-${section.id}-${optionIdx}`} className="ml-3 text-sm text-gray-600">
@@ -1514,7 +1575,7 @@ export default function Product() {
 
                                 {/* Product grid */}
                                 <div className="flex flex-wrap justify-center lg:col-span-4">{
-                                    products.map((item) => <ProductCard product={item} />)}</div>
+                                    customersProduct.products?.content?.map((item) => <ProductCard product={item} key={item.id}/>)}</div>
                             </div>
                         </div>
                     </section>
