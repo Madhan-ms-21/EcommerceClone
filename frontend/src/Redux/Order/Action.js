@@ -6,9 +6,13 @@ import {
   GET_ORDER_BY_ID_FAILURE,
   GET_ORDER_BY_ID_REQUEST,
   GET_ORDER_BY_ID_SUCCESS,
+  GET_ORDER_HISTORY_FAILURE,
+  GET_ORDER_HISTORY_REQUEST,
+  GET_ORDER_HISTORY_SUCCESS,
+  
   
 } from "./ActionType";
-import api, { API_BASE_URL } from "../../../config/api";
+import api, { API_BASE_URL } from "../../Config/axiosApi";
 
 export const createOrder = (reqData) => async (dispatch) => {
   console.log("req data ", reqData);
@@ -22,7 +26,9 @@ export const createOrder = (reqData) => async (dispatch) => {
       },
     };
 
-    const { data } = await api.post(`/api/orders/`,
+    console.log("Inside Order Creation Function")
+
+    const { data } = await api.post(`/api/orders/create`,
       reqData.address,
       config
     );
@@ -82,7 +88,7 @@ export const getOrderHistory = (reqData) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await api.get(`/api/orders/user`);
+    const { data } = await api.get(`/api/orders/all`);
     console.log("order history -------- ", data);
     dispatch({
       type: GET_ORDER_HISTORY_SUCCESS,

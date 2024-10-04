@@ -1,11 +1,28 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import AddressCard from '../Address/AddressCard'
 import OrderTracker from './OrderTracker'
-import { Box, Grid  , Button} from '@mui/material'
+import { Box, Grid, Button } from '@mui/material'
 import { StarIcon } from '@heroicons/react/16/solid'
 import { deepPurple } from '@mui/material/colors'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate, useParams } from 'react-router-dom'
+import { getOrderById } from '../../../Redux/Order/Action'
 
 const OrderDetails = () => {
+
+
+    const dispatch = useDispatch();
+    const jwt = localStorage.getItem("jwt");
+    const { orderId } = useParams();
+    const { order } = useSelector((store) => store);
+
+    console.log("order", order.order);
+
+    useEffect(() => {
+        dispatch(getOrderById(orderId));
+    }, []);
+
+    const navigate = useNavigate();
     return (
         <div className=" px-2 lg:px-36 space-y-7 ">
             <Grid container className="p-3 shadow-lg">
@@ -13,7 +30,7 @@ const OrderDetails = () => {
                     <p className="font-bold text-lg py-2">Delivery Address</p>
                 </Grid>
                 <Grid item xs={6}>
-                    <AddressCard />
+                    <AddressCard address={order?.order?.deliveryAddress}/>
                 </Grid>
             </Grid>
             <Box className="p-5 shadow-lg border rounded-md">
@@ -24,11 +41,11 @@ const OrderDetails = () => {
                     <Grid item xs={9}>
                         <OrderTracker
                             activeStep={
-                                "PLACED" === "PLACED"
+                                order.order?.orderStatus === "PLACED"
                                     ? 1
-                                    : "order.order?.orderStatus" === "CONFIRMED"
+                                    : order.order?.orderStatus === "CONFIRMED"
                                         ? 2
-                                        : "order.order?.orderStatus" === "SHIPPED"
+                                        : order.order?.orderStatus === "SHIPPED"
                                             ? 3
                                             : 5
                             }
@@ -49,7 +66,7 @@ const OrderDetails = () => {
 
 
             <Grid container className="space-y-5">
-                {[1,1,1,1].map((item) => (
+                {order.order?.orderItems.map((item) => (
                     <Grid
                         container
                         item
@@ -61,7 +78,7 @@ const OrderDetails = () => {
                             <div className="flex  items-center ">
                                 <img
                                     className="w-[5rem] h-[5rem] object-cover object-top"
-                                    src="https://tse1.mm.bing.net/th?id=OIP.V2SofZ5w6_aNPb8bNUgQVwHaKt&pid=Api&P=0&h=180"
+                                    src={item?.product?.imageUrl}
                                     alt=""
                                 />
                                 <div className="ml-5 space-y-2">

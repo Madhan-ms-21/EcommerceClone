@@ -1,6 +1,8 @@
 import { Box, Grid } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
 import OrderCard from './OrderCard'
+import { useDispatch, useSelector } from 'react-redux'
+import { getOrderHistory } from '../../../Redux/Order/Action'
 
 
 
@@ -12,6 +14,14 @@ const Order = () => {
         { label: "Cancelled", value: "cancelled" },
         { label: "Returned", value: "returned" }
     ]
+
+    const dispatch = useDispatch();
+    const jwt = localStorage.getItem("jwt");
+    const { order } = useSelector(store => store);
+
+    useEffect(() => {
+        dispatch(getOrderHistory({ jwt }));
+    }, [jwt]);
     return (
         <Box className="px-10 py-10">
             <Grid container spacing={0} sx={{ justifyContent: "space-between" }}>
@@ -32,8 +42,8 @@ const Order = () => {
                 </Grid>
                 <Grid item xs={9}>
                     <Box className="space-y-5 ">
-                        {1 > 0 && [1].map((order) => {
-                            return [1,1,1,1].map((item, index) => <OrderCard item={item} order={order} />)
+                        {order.orders?.length > 0 && order.orders?.map((order) => {
+                            return order?.orderItems?.map((item, index) => <OrderCard item={item} order={order} />)
                         })}
                     </Box>
                 </Grid>
